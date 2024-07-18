@@ -14,10 +14,12 @@ import lombok.experimental.Accessors;
 public final class Space {
     @EqualsAndHashCode.Include
     private final Id id;
+    private final Space.Status status;
 
 
     public Space(final Space.Name name, final Space.Model model) {
         this.id = new Id(name, model);
+        this.status = Status.CREATED;
     }
 
     public Name name() {
@@ -38,5 +40,13 @@ public final class Space {
 
 
     public record Model(String provider, String name) {
+    }
+
+
+    public enum Status {
+        CREATED,
+        ACTIVE,
+        DISABLED,
+        DELETED;
     }
 }
