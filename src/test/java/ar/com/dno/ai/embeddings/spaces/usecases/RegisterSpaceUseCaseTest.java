@@ -29,6 +29,7 @@ class RegisterSpaceUseCaseTest {
         // Given
         final Space.Name name = new Space.Name("test-%s".formatted(Instant.now()));
         final Space.Model model = new Space.Model("provider", "model");
+        final Space.Id id = new Space.Id(name, model);
         final Space space = new Space(name, model);
         final RegisterSpaceUseCase.Request request = new RegisterSpaceUseCase.Request(name, model);
 
@@ -39,7 +40,7 @@ class RegisterSpaceUseCaseTest {
 
         // Then
         assertThrows(SpaceAlreadyExistsException.class, testCase);
-        assertEquals(space, spaceRepository.findByNameAndModel(name, model).orElseThrow());
+        assertEquals(space, spaceRepository.findById(id).orElseThrow());
 
     }
 
@@ -48,9 +49,10 @@ class RegisterSpaceUseCaseTest {
         // Given
         final Space.Name name = new Space.Name("test-%s".formatted(Instant.now()));
         final Space.Model model = new Space.Model("provider", "model");
+        final Space.Id id = new Space.Id(name, model);
         final RegisterSpaceUseCase.Request request = new RegisterSpaceUseCase.Request(name, model);
 
-        final Optional<Space> beforeSave = spaceRepository.findByNameAndModel(name, model);
+        final Optional<Space> beforeSave = spaceRepository.findById(id);
 
         // When
         final Executable testCase = () -> useCase.handle(request);
@@ -58,7 +60,7 @@ class RegisterSpaceUseCaseTest {
         // Then
         assertDoesNotThrow(testCase);
 
-        final Space space = spaceRepository.findByNameAndModel(name, model).orElseThrow();
+        final Space space = spaceRepository.findById(id).orElseThrow();
         assertEquals(Optional.empty(), beforeSave);
         assertEquals(name, space.name());
         assertEquals(model, space.model());

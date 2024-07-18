@@ -5,6 +5,6 @@ import java.util.Optional;
 
 
 public interface SpaceRepository {
-    Optional<Space> findByNameAndModel(Space.Name name, Space.Model model);
+    Optional<Space> findById(Space.Id id);
     void save(Space space);
 }

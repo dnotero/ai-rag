@@ -18,25 +18,29 @@ import static java.util.Objects.nonNull;
 
 @Repository
 public class MemorySpaceRepository implements SpaceRepository, SpaceSearchService {
-    private final Map<Space.Name, Map<Space.Model, Space>> db;
+    private final Map<Space.Id, Space> spacesById;
+    private final Map<Space.Name, Map<Space.Model, Space>> spacesByNameAndModel;
 
 
     public MemorySpaceRepository() {
-        this(new HashMap<>());
+        this(new HashMap<>(), new HashMap<>());
     }
 
-    public MemorySpaceRepository(Map<Space.Name, Map<Space.Model, Space>> db) {
-        this.db = new HashMap<>(db);
+    public MemorySpaceRepository(Map<Space.Id, Space> spacesById,
+                                 Map<Space.Name, Map<Space.Model, Space>> spacesByNameAndModel) {
+        this.spacesById = new HashMap<>(spacesById);
+        this.spacesByNameAndModel = new HashMap<>(spacesByNameAndModel);
     }
 
     @Override
-    public Optional<Space> findByNameAndModel(Space.Name name, Space.Model model) {
-        return Optional.ofNullable(db.getOrDefault(name, Map.of()).get(model));
+    public Optional<Space> findById(Space.Id id) {
+        return Optional.ofNullable(spacesById.get(id));
     }
 
     @Override
     public synchronized void save(final Space space) {
-        db.computeIfAbsent(space.name(), name -> new HashMap<>())
+        spacesById.compute(space.id(), (id, dbSpace) -> doSave(space, dbSpace));
+        spacesByNameAndModel.computeIfAbsent(space.name(), name -> new HashMap<>())
                 .compute(space.model(), (model, dbSpace) -> doSave(space, dbSpace));
     }
 
@@ -50,6 +54,11 @@ public class MemorySpaceRepository implements SpaceRepository, SpaceSearchServic
 
     @Override
     public List<Space> findByName(Space.Name name) {
-        return new ArrayList<>(db.getOrDefault(name, Map.of()).values());
+        return new ArrayList<>(spacesByNameAndModel.getOrDefault(name, Map.of()).values());
+    }
+
+    @Override
+    public Optional<Space> findByNameAndModel(Space.Name name, Space.Model model) {
+        return Optional.ofNullable(spacesByNameAndModel.getOrDefault(name, Map.of()).get(model));
     }
 }

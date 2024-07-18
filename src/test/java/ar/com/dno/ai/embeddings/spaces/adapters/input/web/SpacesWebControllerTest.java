@@ -36,6 +36,7 @@ class SpacesWebControllerTest {
         final String spaceName = "test-%s".formatted(Instant.now().toEpochMilli());
         final Space.Name name = new Space.Name(spaceName);
         final Space.Model model = new Space.Model("openai", "text-embedding-3-small");
+        final Space.Id id = new Space.Id(name, model);
         final Space space = new Space(name, model);
         final String body =
                 """
@@ -59,7 +60,7 @@ class SpacesWebControllerTest {
 
         // Then
         results.andExpect(status().isConflict());
-        assertEquals(space, spaceRepository.findByNameAndModel(name, model).orElseThrow());
+        assertEquals(space, spaceRepository.findById(id).orElseThrow());
     }
 
     @Test
@@ -68,6 +69,7 @@ class SpacesWebControllerTest {
         final String spaceName = "test-%s".formatted(Instant.now().toEpochMilli());
         final Space.Name name = new Space.Name(spaceName);
         final Space.Model model = new Space.Model("openai", "text-embedding-3-small");
+        final Space.Id id = new Space.Id(name, model);
         final Space space = new Space(name, model);
         final String body =
                 """
@@ -89,6 +91,6 @@ class SpacesWebControllerTest {
 
         // Then
         results.andExpect(status().isCreated());
-        assertEquals(space, spaceRepository.findByNameAndModel(name, model).orElseThrow());
+        assertEquals(space, spaceRepository.findById(id).orElseThrow());
     }
 }

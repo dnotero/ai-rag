@@ -2,12 +2,17 @@ package ar.com.dno.ai.embeddings.spaces.domain;
 
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 
-@EqualsAndHashCode
+@Accessors(fluent = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Getter
 @ToString
 public final class Space {
+    @EqualsAndHashCode.Include
     private final Id id;
 
 

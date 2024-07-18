@@ -18,7 +18,7 @@ public class RegisterSpaceUseCase {
 
     public void handle(Request request) {
         final Space.Id spaceId = request.spaceId();
-        final Optional<Space> optionalSpace = spaceRepository.findByNameAndModel(request.name(), request.model());
+        final Optional<Space> optionalSpace = spaceRepository.findById(spaceId);
 
         if(optionalSpace.isPresent()) {
             throw new SpaceAlreadyExistsException(request.name(), request.model());
