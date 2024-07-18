@@ -3,10 +3,13 @@ package ar.com.dno.ai.embeddings.spaces.adapters.output.memory;
 
 import ar.com.dno.ai.embeddings.spaces.domain.Space;
 import ar.com.dno.ai.embeddings.spaces.domain.SpaceRepository;
+import ar.com.dno.ai.embeddings.spaces.domain.SpaceSearchService;
 import ar.com.dno.ai.embeddings.spaces.usecases.exceptions.SpaceAlreadyExistsException;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -14,7 +17,7 @@ import static java.util.Objects.nonNull;
 
 
 @Repository
-public class MemorySpaceRepository implements SpaceRepository {
+public class MemorySpaceRepository implements SpaceRepository, SpaceSearchService {
     private final Map<Space.Name, Map<Space.Model, Space>> db;
 
 
@@ -43,5 +46,10 @@ public class MemorySpaceRepository implements SpaceRepository {
         }
 
         return space;
+    }
+
+    @Override
+    public List<Space> findByName(Space.Name name) {
+        return new ArrayList<>(db.getOrDefault(name, Map.of()).values());
     }
 }

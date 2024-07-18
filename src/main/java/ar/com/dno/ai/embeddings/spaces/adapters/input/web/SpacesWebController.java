@@ -2,19 +2,21 @@ package ar.com.dno.ai.embeddings.spaces.adapters.input.web;
 
 
 import ar.com.dno.ai.embeddings.spaces.domain.Space;
+import ar.com.dno.ai.embeddings.spaces.domain.SpaceSearchService;
 import ar.com.dno.ai.embeddings.spaces.usecases.RegisterSpaceUseCase;
-import ar.com.dno.ai.embeddings.spaces.usecases.exceptions.SpaceAlreadyExistsException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.List;
 
 
 @AllArgsConstructor
@@ -22,12 +24,19 @@ import java.net.URI;
 @RequestMapping("/spaces")
 public class SpacesWebController {
     private RegisterSpaceUseCase registerSpace;
+    private SpaceSearchService spaceSearchService;
 
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> registerSpace(@RequestBody SpacesWebController.CreateSpaceWebRequest webRequest) {
         registerSpace.handle(webRequest.request());
         return ResponseEntity.created(URI.create("")).build();
+    }
+
+    @GetMapping(path = "/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<List<Space>> listSpacesByName(@PathVariable("name") String name) {
+        final List<Space> spaces = spaceSearchService.findByName(new Space.Name(name));
+        return ResponseEntity.ok(spaces);
     }
 
 
