@@ -1,10 +1,10 @@
-package ar.com.dno.ai.embeddings.spaces.adapters.output.memory;
+package ar.com.dno.ai.rag.spaces.adapters.output.memory;
 
 
-import ar.com.dno.ai.embeddings.spaces.domain.Space;
-import ar.com.dno.ai.embeddings.spaces.domain.SpaceRepository;
-import ar.com.dno.ai.embeddings.spaces.domain.SpaceSearchService;
-import ar.com.dno.ai.embeddings.spaces.usecases.exceptions.SpaceAlreadyExistsException;
+import ar.com.dno.ai.rag.spaces.domain.Space;
+import ar.com.dno.ai.rag.spaces.domain.SpaceRepository;
+import ar.com.dno.ai.rag.spaces.domain.SpaceSearchService;
+import ar.com.dno.ai.rag.spaces.usecases.exceptions.SpaceAlreadyExistsException;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

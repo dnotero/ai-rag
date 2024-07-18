@@ -1,9 +1,9 @@
-package ar.com.dno.ai.embeddings.spaces.usecases;
+package ar.com.dno.ai.rag.spaces.usecases;
 
 
-import ar.com.dno.ai.embeddings.spaces.domain.Space;
-import ar.com.dno.ai.embeddings.spaces.domain.SpaceRepository;
-import ar.com.dno.ai.embeddings.spaces.usecases.exceptions.SpaceAlreadyExistsException;
+import ar.com.dno.ai.rag.spaces.domain.Space;
+import ar.com.dno.ai.rag.spaces.domain.SpaceRepository;
+import ar.com.dno.ai.rag.spaces.usecases.exceptions.SpaceAlreadyExistsException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,9 +1,9 @@
-package ar.com.dno.ai.embeddings.spaces.adapters.input.web;
+package ar.com.dno.ai.rag.spaces.adapters.input.web;
 
 
-import ar.com.dno.ai.embeddings.spaces.domain.Space;
-import ar.com.dno.ai.embeddings.spaces.domain.SpaceSearchService;
-import ar.com.dno.ai.embeddings.spaces.usecases.RegisterSpaceUseCase;
+import ar.com.dno.ai.rag.spaces.domain.Space;
+import ar.com.dno.ai.rag.spaces.domain.SpaceSearchService;
+import ar.com.dno.ai.rag.spaces.usecases.RegisterSpaceUseCase;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;

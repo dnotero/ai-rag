@@ -1,4 +1,4 @@
-package ar.com.dno.ai.embeddings.spaces.domain;
+package ar.com.dno.ai.rag.spaces.domain;
 
 
 import java.util.Optional;

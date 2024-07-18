@@ -1,8 +1,8 @@
 package ar.com.dno.ai.embeddings.spaces.adapters.input.web;
 
 
-import ar.com.dno.ai.embeddings.spaces.domain.Space;
-import ar.com.dno.ai.embeddings.spaces.domain.SpaceRepository;
+import ar.com.dno.ai.rag.spaces.domain.Space;
+import ar.com.dno.ai.rag.spaces.domain.SpaceRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

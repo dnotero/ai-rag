@@ -1,7 +1,7 @@
-package ar.com.dno.ai.embeddings.spaces.usecases.exceptions;
+package ar.com.dno.ai.rag.spaces.usecases.exceptions;
 
 
-import ar.com.dno.ai.embeddings.spaces.domain.Space;
+import ar.com.dno.ai.rag.spaces.domain.Space;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 

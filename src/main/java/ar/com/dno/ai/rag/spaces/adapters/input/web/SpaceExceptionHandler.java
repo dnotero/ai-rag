@@ -1,7 +1,7 @@
-package ar.com.dno.ai.embeddings.spaces.adapters.input.web;
+package ar.com.dno.ai.rag.spaces.adapters.input.web;
 
 
-import ar.com.dno.ai.embeddings.spaces.usecases.exceptions.SpaceAlreadyExistsException;
+import ar.com.dno.ai.rag.spaces.usecases.exceptions.SpaceAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

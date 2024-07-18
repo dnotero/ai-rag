@@ -1,9 +1,10 @@
 package ar.com.dno.ai.embeddings.spaces.usecases;
 
 
-import ar.com.dno.ai.embeddings.spaces.domain.Space;
-import ar.com.dno.ai.embeddings.spaces.domain.SpaceRepository;
-import ar.com.dno.ai.embeddings.spaces.usecases.exceptions.SpaceAlreadyExistsException;
+import ar.com.dno.ai.rag.spaces.domain.Space;
+import ar.com.dno.ai.rag.spaces.domain.SpaceRepository;
+import ar.com.dno.ai.rag.spaces.usecases.RegisterSpaceUseCase;
+import ar.com.dno.ai.rag.spaces.usecases.exceptions.SpaceAlreadyExistsException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
