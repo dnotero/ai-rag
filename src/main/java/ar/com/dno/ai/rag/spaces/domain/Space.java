@@ -34,8 +34,12 @@ public final class Space {
         return this.id.model();
     }
 
-    public Space disable() {
+    public Space markAsDisabled() {
         return new Space(this.id, Status.DISABLED);
+    }
+
+    public Space markAsDelete() {
+        return new Space(this.id, Status.DELETED);
     }
 
 

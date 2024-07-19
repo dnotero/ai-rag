@@ -10,16 +10,16 @@ import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
 @Service
-public class DisableSpaceUseCase {
+public class DeleteSpaceUseCase {
     private final SpaceRepository spaceRepository;
 
 
-    public void handle(DisableSpaceUseCase.Request request) {
+    public void handle(DeleteSpaceUseCase.Request request) {
         final Space.Id spaceId = new Space.Id(request.name(), request.model());
         final Space space = spaceRepository.findById(spaceId)
                 .orElseThrow(() -> new SpaceNotFoundException(spaceId));
 
-        final Space disabledSpace = space.markAsDisabled();
+        final Space disabledSpace = space.markAsDelete();
 
         spaceRepository.save(disabledSpace);
     }
