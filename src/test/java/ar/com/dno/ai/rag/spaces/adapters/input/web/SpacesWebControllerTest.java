@@ -1,4 +1,4 @@
-package ar.com.dno.ai.embeddings.spaces.adapters.input.web;
+package ar.com.dno.ai.rag.spaces.adapters.input.web;
 
 
 import ar.com.dno.ai.rag.spaces.domain.Space;

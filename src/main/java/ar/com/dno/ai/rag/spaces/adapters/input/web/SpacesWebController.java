@@ -2,7 +2,8 @@ package ar.com.dno.ai.rag.spaces.adapters.input.web;
 
 
 import ar.com.dno.ai.rag.spaces.domain.Space;
-import ar.com.dno.ai.rag.spaces.domain.SpaceSearchService;
+import ar.com.dno.ai.rag.spaces.usecases.GetSpaceUseCase;
+import ar.com.dno.ai.rag.spaces.usecases.ListSpacesUseCase;
 import ar.com.dno.ai.rag.spaces.usecases.RegisterSpaceUseCase;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 
 @AllArgsConstructor
@@ -24,7 +26,8 @@ import java.util.List;
 @RequestMapping("/spaces")
 public class SpacesWebController {
     private RegisterSpaceUseCase registerSpace;
-    private SpaceSearchService spaceSearchService;
+    private GetSpaceUseCase getSpace;
+    private ListSpacesUseCase listSpaces;
 
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -35,8 +38,18 @@ public class SpacesWebController {
 
     @GetMapping(path = "/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<List<Space>> listSpacesByName(@PathVariable("name") String name) {
-        final List<Space> spaces = spaceSearchService.findByName(new Space.Name(name));
+        final ListSpacesUseCase.Query query = new ListSpacesUseCase.Query(new Space.Name(name));
+        final List<Space> spaces = listSpaces.handle(query);
         return ResponseEntity.ok(spaces);
+    }
+
+    @GetMapping(path = "/{name}/providers/{provider}/models/{model}")
+    ResponseEntity<Space> getSpace(@PathVariable("name") String name,
+                                   @PathVariable("provider") String provider,
+                                   @PathVariable("model") String model) {
+        final GetSpaceUseCase.Query query = new GetSpaceUseCase.Query(new Space.Name(name), new Space.Model(provider, model));
+        final Optional<Space> optionalSpace = getSpace.handle(query);
+        return ResponseEntity.of(optionalSpace);
     }
 
 

@@ -15,9 +15,10 @@ public class GetSpaceUseCase {
     private final SpaceSearchService spaceSearchService;
 
 
-    public Optional<Space> query(GetSpaceUseCase.Query query) {
+    public Optional<Space> handle(GetSpaceUseCase.Query query) {
         return spaceSearchService.findByNameAndModel(query.name(), query.model());
     }
+
 
     public record Query(Space.Name name, Space.Model model) {
     }

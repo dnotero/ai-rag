@@ -1,4 +1,4 @@
-package ar.com.dno.ai.embeddings.spaces.usecases;
+package ar.com.dno.ai.rag.spaces.usecases;
 
 
 import ar.com.dno.ai.rag.spaces.domain.Space;

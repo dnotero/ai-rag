@@ -1,9 +1,9 @@
-package ar.com.dno.ai.embeddings.spaces.usecases;
+package ar.com.dno.ai.rag.spaces.usecases;
 
 
 import ar.com.dno.ai.rag.spaces.domain.Space;
 import ar.com.dno.ai.rag.spaces.domain.SpaceRepository;
-import ar.com.dno.ai.rag.spaces.usecases.ListSpaceVersionsUseCase;
+import ar.com.dno.ai.rag.spaces.usecases.ListSpacesUseCase;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,21 +15,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-class ListSpaceVersionsUseCaseTest {
+class ListSpacesUseCaseTest {
     @Autowired
     private SpaceRepository spaceRepository;
     @Autowired
-    private ListSpaceVersionsUseCase useCase;
+    private ListSpacesUseCase useCase;
 
 
     @Test
     void noSpacesFound() {
         // Given
         final Space.Name name = new Space.Name("test-%s".formatted(Instant.now()));
-        final ListSpaceVersionsUseCase.Query query = new ListSpaceVersionsUseCase.Query(name);
+        final ListSpacesUseCase.Query query = new ListSpacesUseCase.Query(name);
 
         // When
-        final List<Space> spaces = useCase.query(query);
+        final List<Space> spaces = useCase.handle(query);
 
         // Then
         assertEquals(List.of(), spaces);
@@ -41,12 +41,12 @@ class ListSpaceVersionsUseCaseTest {
         final Space.Name name = new Space.Name("test-%s".formatted(Instant.now()));
         final Space.Model model = new Space.Model("provider", "model");
         final Space space = new Space(name, model);
-        final ListSpaceVersionsUseCase.Query query = new ListSpaceVersionsUseCase.Query(name);
+        final ListSpacesUseCase.Query query = new ListSpacesUseCase.Query(name);
 
         spaceRepository.save(space);
 
         // When
-        final List<Space> spaces = useCase.query(query);
+        final List<Space> spaces = useCase.handle(query);
 
         // Then
         assertEquals(List.of(space), spaces);

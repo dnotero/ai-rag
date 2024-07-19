@@ -11,11 +11,11 @@ import java.util.List;
 
 @AllArgsConstructor
 @Service
-public class ListSpaceVersionsUseCase {
+public class ListSpacesUseCase {
     private final SpaceSearchService spaceSearchService;
 
 
-    public List<Space> query(ListSpaceVersionsUseCase.Query query) {
+    public List<Space> handle(ListSpacesUseCase.Query query) {
         return spaceSearchService.findByName(query.name());
     }
 
