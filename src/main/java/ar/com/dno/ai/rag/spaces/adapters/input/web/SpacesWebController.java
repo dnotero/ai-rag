@@ -30,6 +30,7 @@ public class SpacesWebController {
     private ListSpacesUseCase listSpaces;
 
 
+
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> registerSpace(@RequestBody SpacesWebController.CreateSpaceWebRequest webRequest) {
         registerSpace.handle(webRequest.request());
@@ -51,7 +52,6 @@ public class SpacesWebController {
         final Optional<Space> optionalSpace = getSpace.handle(query);
         return ResponseEntity.of(optionalSpace);
     }
-
 
     public record CreateSpaceWebRequest(@JsonProperty("name") String name, @JsonProperty("model") Space.Model model) {
         RegisterSpaceUseCase.Request request() {

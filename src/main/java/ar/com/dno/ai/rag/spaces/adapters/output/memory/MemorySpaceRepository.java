@@ -4,7 +4,6 @@ package ar.com.dno.ai.rag.spaces.adapters.output.memory;
 import ar.com.dno.ai.rag.spaces.domain.Space;
 import ar.com.dno.ai.rag.spaces.domain.SpaceRepository;
 import ar.com.dno.ai.rag.spaces.domain.SpaceSearchService;
-import ar.com.dno.ai.rag.spaces.usecases.exceptions.SpaceAlreadyExistsException;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -12,8 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import static java.util.Objects.nonNull;
 
 
 @Repository
@@ -39,17 +36,8 @@ public class MemorySpaceRepository implements SpaceRepository, SpaceSearchServic
 
     @Override
     public synchronized void save(final Space space) {
-        spacesById.compute(space.id(), (id, dbSpace) -> doSave(space, dbSpace));
-        spacesByNameAndModel.computeIfAbsent(space.name(), name -> new HashMap<>())
-                .compute(space.model(), (model, dbSpace) -> doSave(space, dbSpace));
-    }
-
-    private static Space doSave(Space space, Space dbSpace) {
-        if (nonNull(dbSpace)) {
-            throw new SpaceAlreadyExistsException(space.name(), space.model());
-        }
-
-        return space;
+        spacesById.put(space.id(), space);
+        spacesByNameAndModel.computeIfAbsent(space.name(), name -> new HashMap<>()).put(space.model(), space);
     }
 
     @Override

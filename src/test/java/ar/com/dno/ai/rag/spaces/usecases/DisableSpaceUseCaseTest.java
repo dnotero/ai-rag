@@ -3,55 +3,51 @@ package ar.com.dno.ai.rag.spaces.usecases;
 
 import ar.com.dno.ai.rag.spaces.domain.Space;
 import ar.com.dno.ai.rag.spaces.domain.SpaceRepository;
-import ar.com.dno.ai.rag.spaces.usecases.exceptions.SpaceAlreadyExistsException;
+import ar.com.dno.ai.rag.spaces.usecases.exceptions.SpaceNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.Instant;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-class RegisterSpaceUseCaseTest {
+class DisableSpaceUseCaseTest {
     @Autowired
     private SpaceRepository spaceRepository;
     @Autowired
-    private RegisterSpaceUseCase useCase;
+    private DisableSpaceUseCase useCase;
 
 
     @Test
-    void noDuplicateSpacesAllowed() {
+    void noSpaceFound() {
         // Given
         final Space.Name name = new Space.Name("test-%s".formatted(Instant.now()));
         final Space.Model model = new Space.Model("provider", "model");
-        final Space.Id id = new Space.Id(name, model);
-        final Space space = new Space(name, model);
-        final RegisterSpaceUseCase.Request request = new RegisterSpaceUseCase.Request(name, model);
-
-        spaceRepository.save(space);
+        final DisableSpaceUseCase.Request request = new DisableSpaceUseCase.Request(name, model);
 
         // When
         final Executable testCase = () -> useCase.handle(request);
 
         // Then
-        assertThrows(SpaceAlreadyExistsException.class, testCase);
-        assertEquals(space, spaceRepository.findById(id).orElseThrow());
+        assertThrows(SpaceNotFoundException.class, testCase);
     }
 
     @Test
-    void spaceIsRegisteredCorrectly() {
+    void spaceDisabled() {
         // Given
         final Space.Name name = new Space.Name("test-%s".formatted(Instant.now()));
         final Space.Model model = new Space.Model("provider", "model");
         final Space.Id id = new Space.Id(name, model);
-        final RegisterSpaceUseCase.Request request = new RegisterSpaceUseCase.Request(name, model);
+        final Space originalSpace = new Space(name, model);
+        final DisableSpaceUseCase.Request request = new DisableSpaceUseCase.Request(name, model);
 
-        final Optional<Space> beforeSave = spaceRepository.findById(id);
+        spaceRepository.save(originalSpace);
 
         // When
         final Executable testCase = () -> useCase.handle(request);
@@ -60,9 +56,8 @@ class RegisterSpaceUseCaseTest {
         assertDoesNotThrow(testCase);
 
         final Space space = spaceRepository.findById(id).orElseThrow();
-        assertEquals(Optional.empty(), beforeSave);
         assertEquals(name, space.name());
         assertEquals(model, space.model());
-        assertEquals(Space.Status.CREATED, space.status());
+        assertEquals(Space.Status.DISABLED, space.status());
     }
 }

@@ -18,8 +18,12 @@ public final class Space {
 
 
     public Space(final Space.Name name, final Space.Model model) {
-        this.id = new Id(name, model);
-        this.status = Status.CREATED;
+        this(new Id(name, model), Status.CREATED);
+    }
+
+    private Space(final Space.Id id, final Space.Status status) {
+        this.id = id;
+        this.status = status;
     }
 
     public Name name() {
@@ -28,6 +32,10 @@ public final class Space {
 
     public Model model() {
         return this.id.model();
+    }
+
+    public Space disable() {
+        return new Space(this.id, Status.DISABLED);
     }
 
 
