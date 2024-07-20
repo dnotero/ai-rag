@@ -1,4 +1,4 @@
-package ar.com.dno.ai.rag.controlplane.models.usecases.exceptions;
+package ar.com.dno.ai.rag.controlplane.spaces.usecases.exceptions;
 
 
 import ar.com.dno.ai.rag.controlplane.models.domain.SupportedModel;
@@ -8,6 +8,6 @@ import lombok.Value;
 
 @Value
 @EqualsAndHashCode(callSuper = false)
-public class SupportedModelNotFoundException extends RuntimeException {
+public class ModelNotSupportedException extends RuntimeException {
     SupportedModel.Id modelId;
 }

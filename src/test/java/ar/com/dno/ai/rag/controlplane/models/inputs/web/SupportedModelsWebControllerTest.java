@@ -66,7 +66,7 @@ class SupportedModelsWebControllerTest {
 
         // Then
         results.andExpect(status().isConflict());
-        assertEquals(model, modelRepository.findById(id).orElseThrow());
+        assertEquals(model, modelRepository.findBy(id).orElseThrow());
     }
 
     @Test
@@ -91,7 +91,7 @@ class SupportedModelsWebControllerTest {
 
         // Then
         results.andExpect(status().isCreated());
-        final SupportedModel supportedModel = modelRepository.findById(id).orElseThrow();
+        final SupportedModel supportedModel = modelRepository.findBy(id).orElseThrow();
         assertEquals(provider, supportedModel.provider());
         assertEquals(name, supportedModel.name());
         assertEquals(SupportedModel.Status.ENABLED, supportedModel.status());
@@ -121,7 +121,7 @@ class SupportedModelsWebControllerTest {
 
         // Then
         results.andExpect(status().isNoContent());
-        final SupportedModel supportedModel = modelRepository.findById(id).orElseThrow();
+        final SupportedModel supportedModel = modelRepository.findBy(id).orElseThrow();
         assertEquals(provider, supportedModel.provider());
         assertEquals(name, supportedModel.name());
         assertEquals(SupportedModel.Status.DEPRECATED, supportedModel.status());
@@ -183,7 +183,7 @@ class SupportedModelsWebControllerTest {
 
         // Then
         results.andExpect(status().isNoContent());
-        final SupportedModel supportedModel = modelRepository.findById(id).orElseThrow();
+        final SupportedModel supportedModel = modelRepository.findBy(id).orElseThrow();
         assertEquals(provider, supportedModel.provider());
         assertEquals(name, supportedModel.name());
         assertEquals(SupportedModel.Status.ENABLED, supportedModel.status());

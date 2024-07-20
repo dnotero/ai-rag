@@ -1,6 +1,8 @@
 package ar.com.dno.ai.rag.controlplane.spaces.usecases;
 
 
+import ar.com.dno.ai.rag.controlplane.models.domain.SupportedModel;
+import ar.com.dno.ai.rag.controlplane.models.usecases.RegisterSupportedModelUseCase;
 import ar.com.dno.ai.rag.controlplane.spaces.domain.Space;
 import ar.com.dno.ai.rag.controlplane.spaces.domain.SpaceRepository;
 import ar.com.dno.ai.rag.controlplane.spaces.usecases.exceptions.SpaceAlreadyExistsException;
@@ -22,6 +24,8 @@ class RegisterSpaceUseCaseTest {
     private SpaceRepository spaceRepository;
     @Autowired
     private RegisterSpaceUseCase useCase;
+    @Autowired
+    private RegisterSupportedModelUseCase registerSupportedModel;
 
 
     @Test
@@ -51,6 +55,11 @@ class RegisterSpaceUseCaseTest {
         final Space.Id id = new Space.Id(name, model);
         final RegisterSpaceUseCase.Request request = new RegisterSpaceUseCase.Request(name, model);
 
+        registerSupportedModel.handle(new RegisterSupportedModelUseCase.Request(
+                new SupportedModel.Provider("provider"),
+                new SupportedModel.Name("model"),
+                null
+        ));
         final Optional<Space> beforeSave = spaceRepository.findById(id);
 
         // When

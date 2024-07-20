@@ -19,7 +19,7 @@ public class RegisterSupportedModelUseCase {
 
     public void handle(RegisterSupportedModelUseCase.Request request) {
         final SupportedModel.Id id = request.modelId();
-        final Optional<SupportedModel> optionalSupportedModel = modelRepository.findById(id);
+        final Optional<SupportedModel> optionalSupportedModel = modelRepository.findBy(id);
 
         if (optionalSupportedModel.isPresent()) {
             throw new ModelAlreadySupportedException(id);

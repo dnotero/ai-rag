@@ -27,7 +27,7 @@ public class MemorySupportedModelRepository implements SupportedModelRepository,
     }
 
     @Override
-    public Optional<SupportedModel> findById(SupportedModel.Id id) {
+    public Optional<SupportedModel> findBy(SupportedModel.Id id) {
         return Optional.ofNullable(db.get(id));
     }
 
