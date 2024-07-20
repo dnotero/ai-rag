@@ -5,6 +5,6 @@ import java.util.Optional;
 
 
 public interface SupportedModelRepository {
-    Optional<SupportedModel> findById(SupportedModel.Id id);
+    Optional<SupportedModel> findBy(SupportedModel.Id id);
     void save(SupportedModel model);
 }

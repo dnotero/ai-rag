@@ -1,13 +1,14 @@
 package ar.com.dno.ai.rag.controlplane.spaces.adapters.input.web;
 
 
+import ar.com.dno.ai.rag.controlplane.models.domain.SupportedModel;
+import ar.com.dno.ai.rag.controlplane.models.usecases.RegisterSupportedModelUseCase;
 import ar.com.dno.ai.rag.controlplane.spaces.domain.Space;
 import ar.com.dno.ai.rag.controlplane.spaces.domain.SpaceRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -26,7 +27,7 @@ class SpacesWebControllerTest {
     @Autowired
     private MockMvc mvc;
     @Autowired
-    private TestRestTemplate restTemplate;
+    private RegisterSupportedModelUseCase registerSupportedModel;
     @Autowired
     private SpaceRepository spaceRepository;
 
@@ -38,7 +39,6 @@ class SpacesWebControllerTest {
         final Space.Name name = new Space.Name(spaceName);
         final Space.Model model = new Space.Model("openai", "text-embedding-3-small");
         final Space.Id id = new Space.Id(name, model);
-        final Space space = new Space(name, model);
         final String body =
                 """
                     {
@@ -50,6 +50,7 @@ class SpacesWebControllerTest {
                     }
                 """.formatted(spaceName);
 
+        final Space space = new Space(name, model);
         spaceRepository.save(space);
 
         // When
@@ -83,6 +84,12 @@ class SpacesWebControllerTest {
                     }
                 """.formatted(spaceName);
 
+        registerSupportedModel.handle(new RegisterSupportedModelUseCase.Request(
+                new SupportedModel.Provider("openai"),
+                new SupportedModel.Name("text-embedding-3-small"),
+                null
+        ));
+
         // When
         final ResultActions results = mvc.perform(
                 post("/admin/spaces")
@@ -115,11 +122,8 @@ class SpacesWebControllerTest {
                     }
                 """.formatted(name, provider, model);
 
-        final ResultActions registerResult = mvc.perform(
-                post("/admin/spaces").contentType(MediaType.APPLICATION_JSON).content(body)
-        );
-
-        registerResult.andExpect(status().isCreated());
+        final Space space = new Space(new Space.Name(name), new Space.Model(provider, model));
+        spaceRepository.save(space);
 
         // When
         final ResultActions deleteResult = mvc.perform(
@@ -130,7 +134,7 @@ class SpacesWebControllerTest {
 
         // Then
         deleteResult.andExpect(status().isNoContent());
-        final Space space = spaceRepository.findById(id).orElseThrow();
-        assertEquals(Space.Status.DELETED, space.status());
+        final Space deletedSpace = spaceRepository.findById(id).orElseThrow();
+        assertEquals(Space.Status.DELETED, deletedSpace.status());
     }
 }

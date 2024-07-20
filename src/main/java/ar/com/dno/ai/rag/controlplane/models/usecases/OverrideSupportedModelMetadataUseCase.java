@@ -17,7 +17,7 @@ public class OverrideSupportedModelMetadataUseCase {
 
     public void handle(OverrideSupportedModelMetadataUseCase.Request request) {
         final SupportedModel.Id id = request.modelId();
-        final SupportedModel supportedModel = modelRepository.findById(id)
+        final SupportedModel supportedModel = modelRepository.findBy(id)
                 .orElseThrow(() -> new SupportedModelNotFoundException(id));
 
         final SupportedModel updatedSupportedModel = supportedModel.metadata(request.metadata());

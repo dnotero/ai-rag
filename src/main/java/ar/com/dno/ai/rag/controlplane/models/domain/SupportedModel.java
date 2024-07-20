@@ -46,6 +46,10 @@ public class SupportedModel {
         return new SupportedModel(this.id, this.status, metadata);
     }
 
+    public boolean isEnabled() {
+        return Status.ENABLED == this.status;
+    }
+
 
     public record Id(SupportedModel.Provider provider, SupportedModel.Name name) {
     }

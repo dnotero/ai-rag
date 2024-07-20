@@ -1,6 +1,7 @@
 package ar.com.dno.ai.rag.controlplane.spaces.domain;
 
 
+import ar.com.dno.ai.rag.controlplane.models.domain.SupportedModel;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -53,6 +54,9 @@ public final class Space {
 
 
     public record Model(String provider, String name) {
+        public SupportedModel.Id toSupportedModelId() {
+            return new SupportedModel.Id(new SupportedModel.Provider(this.provider), new SupportedModel.Name(this.name));
+        }
     }
 
 
