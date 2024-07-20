@@ -1,6 +1,7 @@
 package ar.com.dno.ai.rag.controlplane.spaces.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -9,7 +10,7 @@ import lombok.experimental.Accessors;
 
 @Accessors(fluent = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Getter
+@Getter(onMethod = @__(@JsonProperty))
 @ToString
 public final class Space {
     @EqualsAndHashCode.Include

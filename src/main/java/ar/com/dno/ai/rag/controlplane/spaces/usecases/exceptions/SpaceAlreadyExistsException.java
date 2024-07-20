@@ -9,6 +9,5 @@ import lombok.Value;
 @Value
 @EqualsAndHashCode(callSuper = false)
 public class SpaceAlreadyExistsException extends RuntimeException {
-    Space.Name name;
-    Space.Model model;
+    Space.Id spaceId;
 }

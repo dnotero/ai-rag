@@ -25,7 +25,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/spaces")
+@RequestMapping("/admin/spaces")
 public class SpacesWebController {
     private RegisterSpaceUseCase registerSpace;
     private GetSpaceUseCase getSpace;

@@ -1,9 +1,9 @@
 package ar.com.dno.ai.rag.controlplane.spaces.usecases;
 
 
-import ar.com.dno.ai.rag.controlplane.spaces.usecases.exceptions.SpaceAlreadyExistsException;
 import ar.com.dno.ai.rag.controlplane.spaces.domain.Space;
 import ar.com.dno.ai.rag.controlplane.spaces.domain.SpaceRepository;
+import ar.com.dno.ai.rag.controlplane.spaces.usecases.exceptions.SpaceAlreadyExistsException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,7 @@ public class RegisterSpaceUseCase {
         final Optional<Space> optionalSpace = spaceRepository.findById(spaceId);
 
         if(optionalSpace.isPresent()) {
-            throw new SpaceAlreadyExistsException(request.name(), request.model());
+            throw new SpaceAlreadyExistsException(spaceId);
         }
 
         final Space space = new Space(request.name(), request.model());

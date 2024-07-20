@@ -54,7 +54,7 @@ class SpacesWebControllerTest {
 
         // When
         final ResultActions results = mvc.perform(
-                post("/spaces")
+                post("/admin/spaces")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body)
         );
@@ -85,7 +85,7 @@ class SpacesWebControllerTest {
 
         // When
         final ResultActions results = mvc.perform(
-                post("/spaces")
+                post("/admin/spaces")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body)
         );
@@ -116,14 +116,14 @@ class SpacesWebControllerTest {
                 """.formatted(name, provider, model);
 
         final ResultActions registerResult = mvc.perform(
-                post("/spaces").contentType(MediaType.APPLICATION_JSON).content(body)
+                post("/admin/spaces").contentType(MediaType.APPLICATION_JSON).content(body)
         );
 
         registerResult.andExpect(status().isCreated());
 
         // When
         final ResultActions deleteResult = mvc.perform(
-                delete("/spaces/%s/providers/%s/models/%s".formatted(name, provider, model))
+                delete("/admin/spaces/%s/providers/%s/models/%s".formatted(name, provider, model))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body)
         );
