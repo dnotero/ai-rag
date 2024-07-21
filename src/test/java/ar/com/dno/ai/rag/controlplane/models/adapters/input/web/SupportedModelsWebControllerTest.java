@@ -130,17 +130,19 @@ class SupportedModelsWebControllerTest {
 
     @Test
     void listSupportedModels() throws Exception {
-        final SupportedModel.Provider provider = new SupportedModel.Provider("openai");
-        final String supportedModelName = "text-embedding-3-small-%s".formatted(Instant.now().toEpochMilli());
-        final SupportedModel.Name name = new SupportedModel.Name(supportedModelName);
+        final String provider = "openai";
+        final String model = "text-embedding-3-small-%s".formatted(Instant.now().toEpochMilli());
         final JsonNode metadata = objectMapper.readTree(
                 """
                     {
                         "field_1": "value_1"
                     }
                 """);
-        final SupportedModel model = new SupportedModel(provider, name, metadata);
-        modelRepository.save(model);
+        modelRepository.save(new SupportedModel(
+                new SupportedModel.Provider(provider),
+                new SupportedModel.Name(model),
+                metadata
+        ));
 
         // When
         final ResultActions results = mvc.perform(
@@ -150,8 +152,9 @@ class SupportedModelsWebControllerTest {
         // Then
         results.andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0].id.name.value").value(is(supportedModelName)))
-                .andDo(MockMvcResultHandlers.print());;
+                .andExpect(jsonPath("$[0].id.provider").value(is(provider)))
+                .andExpect(jsonPath("$[0].id.name").value(is(model)))
+                .andDo(MockMvcResultHandlers.print());
     }
 
     @Test

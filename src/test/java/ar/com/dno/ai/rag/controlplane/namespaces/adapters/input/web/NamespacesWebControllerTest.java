@@ -11,11 +11,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.time.Instant;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -32,6 +36,8 @@ class NamespacesWebControllerTest {
     void noDuplicateNamespacesAllowed() throws Exception {
         // Given
         final String nameValue = "test-%s".formatted(Instant.now().toEpochMilli());
+        final Namespace.Name name = new Namespace.Name(nameValue);
+        final Namespace namespace = new Namespace(name, Criticality.TEST);
         final String body =
                 """
                     {
@@ -40,8 +46,6 @@ class NamespacesWebControllerTest {
                     }
                 """.formatted(nameValue);
 
-        final Namespace.Name name = new Namespace.Name(nameValue);
-        final Namespace namespace = new Namespace(name, Criticality.TEST);
         namespaceRepository.save(namespace);
 
         // When
@@ -80,6 +84,25 @@ class NamespacesWebControllerTest {
         // Then
         results.andExpect(status().isCreated());
         assertEquals(namespace, namespaceRepository.findBy(name).orElseThrow());
+    }
+
+    @Test
+    void listNamespaces() throws Exception {
+        // Given
+        final String name = "test-%s".formatted(Instant.now().toEpochMilli());
+        final Namespace namespace = new Namespace(new Namespace.Name(name), Criticality.TEST);
+        namespaceRepository.save(namespace);
+
+        // When
+        final ResultActions results = mvc.perform(
+                get("/admin/namespaces").contentType(MediaType.APPLICATION_JSON)
+        );
+
+        // Then
+        results.andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$[0].name").value(is(name)))
+                .andDo(MockMvcResultHandlers.print());;
     }
 
 }
