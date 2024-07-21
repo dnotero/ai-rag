@@ -1,4 +1,4 @@
-package ar.com.dno.ai.rag.controlplane.models.inputs.web;
+package ar.com.dno.ai.rag.controlplane.models.adapters.input.web;
 
 
 import ar.com.dno.ai.rag.controlplane.models.domain.SupportedModel;

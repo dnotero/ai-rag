@@ -52,13 +52,25 @@ public class SupportedModel {
 
 
     public record Id(SupportedModel.Provider provider, SupportedModel.Name name) {
+        @Override
+        public String toString() {
+            return "%s-%s".formatted(this.provider, this.name);
+        }
     }
 
     public record Provider(String value) {
+        @Override
+        public String toString() {
+            return this.value;
+        }
     }
 
 
     public record Name(String value) {
+        @Override
+        public String toString() {
+            return this.value;
+        }
     }
 
 

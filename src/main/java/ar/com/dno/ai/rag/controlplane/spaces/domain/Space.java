@@ -46,16 +46,29 @@ public final class Space {
 
 
     public record Id(Name name, Model model) {
+        @Override
+        public String toString() {
+            return "%s--%s".formatted(this.name, this.model);
+        }
     }
 
 
     public record Name(String value) {
+        @Override
+        public String toString() {
+            return this.value;
+        }
     }
 
 
     public record Model(String provider, String name) {
         public SupportedModel.Id toSupportedModelId() {
             return new SupportedModel.Id(new SupportedModel.Provider(this.provider), new SupportedModel.Name(this.name));
+        }
+
+        @Override
+        public String toString() {
+            return "%s-%s".formatted(this.provider, this.name);
         }
     }
 
