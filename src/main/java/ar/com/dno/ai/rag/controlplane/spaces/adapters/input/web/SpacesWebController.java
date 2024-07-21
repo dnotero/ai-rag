@@ -1,6 +1,7 @@
 package ar.com.dno.ai.rag.controlplane.spaces.adapters.input.web;
 
 
+import ar.com.dno.ai.rag.controlplane.commons.Criticality;
 import ar.com.dno.ai.rag.controlplane.spaces.domain.Space;
 import ar.com.dno.ai.rag.controlplane.spaces.usecases.DeleteSpaceUseCase;
 import ar.com.dno.ai.rag.controlplane.spaces.usecases.GetSpaceUseCase;
@@ -40,7 +41,7 @@ public class SpacesWebController {
         return ResponseEntity.created(URI.create("")).build();
     }
 
-    @GetMapping(path = "/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/{name}")
     ResponseEntity<List<Space>> listSpacesByName(@PathVariable("name") String name) {
         final ListSpacesUseCase.Query query = new ListSpacesUseCase.Query(new Space.Name(name));
         final List<Space> spaces = listSpaces.handle(query);
@@ -71,9 +72,11 @@ public class SpacesWebController {
         return ResponseEntity.noContent().build();
     }
 
-    public record CreateSpaceWebRequest(@JsonProperty("name") String name, @JsonProperty("model") Space.Model model) {
+    public record CreateSpaceWebRequest(@JsonProperty("name") String name,
+                                        @JsonProperty("model") Space.Model model,
+                                        @JsonProperty("criticality") Criticality criticality) {
         RegisterSpaceUseCase.Request request() {
-            return new RegisterSpaceUseCase.Request(new Space.Name(this.name), this.model);
+            return new RegisterSpaceUseCase.Request(new Space.Name(this.name), this.model, this.criticality);
         }
     }
 }

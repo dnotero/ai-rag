@@ -1,6 +1,7 @@
 package ar.com.dno.ai.rag.controlplane.spaces.usecases;
 
 
+import ar.com.dno.ai.rag.controlplane.commons.Criticality;
 import ar.com.dno.ai.rag.controlplane.spaces.domain.Space;
 import ar.com.dno.ai.rag.controlplane.spaces.domain.SpaceRepository;
 import ar.com.dno.ai.rag.controlplane.spaces.usecases.exceptions.SpaceNotFoundException;
@@ -44,7 +45,7 @@ class DisableSpaceUseCaseTest {
         final Space.Name name = new Space.Name("test-%s".formatted(Instant.now()));
         final Space.Model model = new Space.Model("provider", "model");
         final Space.Id id = new Space.Id(name, model);
-        final Space originalSpace = new Space(name, model);
+        final Space originalSpace = new Space(name, model, Criticality.TEST);
         final DisableSpaceUseCase.Request request = new DisableSpaceUseCase.Request(name, model);
 
         spaceRepository.save(originalSpace);

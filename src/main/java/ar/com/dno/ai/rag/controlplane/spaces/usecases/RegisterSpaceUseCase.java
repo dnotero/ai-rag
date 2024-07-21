@@ -1,6 +1,7 @@
 package ar.com.dno.ai.rag.controlplane.spaces.usecases;
 
 
+import ar.com.dno.ai.rag.controlplane.commons.Criticality;
 import ar.com.dno.ai.rag.controlplane.models.domain.SupportedModel;
 import ar.com.dno.ai.rag.controlplane.models.domain.SupportedModelSearchService;
 import ar.com.dno.ai.rag.controlplane.spaces.domain.Space;
@@ -36,12 +37,12 @@ public class RegisterSpaceUseCase {
             throw new ModelNotSupportedException(supportedModelId);
         }
 
-        final Space space = new Space(request.name(), request.model());
+        final Space space = new Space(request.name(), request.model(), request.criticality());
         spaceRepository.save(space);
     }
 
 
-    public record Request(Space.Name name, Space.Model model) {
+    public record Request(Space.Name name, Space.Model model, Criticality criticality) {
         public Space.Id spaceId() {
             return new Space.Id(this.name, this.model);
         }

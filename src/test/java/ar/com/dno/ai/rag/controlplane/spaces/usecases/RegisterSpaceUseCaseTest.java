@@ -1,6 +1,7 @@
 package ar.com.dno.ai.rag.controlplane.spaces.usecases;
 
 
+import ar.com.dno.ai.rag.controlplane.commons.Criticality;
 import ar.com.dno.ai.rag.controlplane.models.domain.SupportedModel;
 import ar.com.dno.ai.rag.controlplane.models.usecases.RegisterSupportedModelUseCase;
 import ar.com.dno.ai.rag.controlplane.spaces.domain.Space;
@@ -34,8 +35,8 @@ class RegisterSpaceUseCaseTest {
         final Space.Name name = new Space.Name("test-%s".formatted(Instant.now()));
         final Space.Model model = new Space.Model("provider", "model");
         final Space.Id id = new Space.Id(name, model);
-        final Space space = new Space(name, model);
-        final RegisterSpaceUseCase.Request request = new RegisterSpaceUseCase.Request(name, model);
+        final Space space = new Space(name, model, Criticality.TEST);
+        final RegisterSpaceUseCase.Request request = new RegisterSpaceUseCase.Request(name, model, Criticality.TEST);
 
         spaceRepository.save(space);
 
@@ -53,7 +54,7 @@ class RegisterSpaceUseCaseTest {
         final Space.Name name = new Space.Name("test-%s".formatted(Instant.now()));
         final Space.Model model = new Space.Model("provider", "model");
         final Space.Id id = new Space.Id(name, model);
-        final RegisterSpaceUseCase.Request request = new RegisterSpaceUseCase.Request(name, model);
+        final RegisterSpaceUseCase.Request request = new RegisterSpaceUseCase.Request(name, model, Criticality.TEST);
 
         registerSupportedModel.handle(new RegisterSupportedModelUseCase.Request(
                 new SupportedModel.Provider("provider"),
