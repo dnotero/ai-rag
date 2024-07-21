@@ -2,6 +2,7 @@ package ar.com.dno.ai.rag.controlplane.models.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -55,10 +56,20 @@ public class SupportedModel {
     }
 
     public record Provider(String value) {
+        @JsonValue
+        @Override
+        public String toString() {
+            return this.value;
+        }
     }
 
 
     public record Name(String value) {
+        @JsonValue
+        @Override
+        public String toString() {
+            return this.value;
+        }
     }
 
 

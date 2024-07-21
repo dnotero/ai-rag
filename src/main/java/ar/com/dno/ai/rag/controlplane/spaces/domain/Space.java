@@ -3,6 +3,7 @@ package ar.com.dno.ai.rag.controlplane.spaces.domain;
 
 import ar.com.dno.ai.rag.controlplane.models.domain.SupportedModel;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -50,6 +51,11 @@ public final class Space {
 
 
     public record Name(String value) {
+        @JsonValue
+        @Override
+        public String toString() {
+            return this.value;
+        }
     }
 
 
