@@ -5,6 +5,7 @@ import ar.com.dno.ai.rag.controlplane.models.domain.SupportedModel;
 import ar.com.dno.ai.rag.controlplane.models.domain.SupportedModelRepository;
 import ar.com.dno.ai.rag.controlplane.models.usecases.exceptions.ModelAlreadySupportedException;
 import com.fasterxml.jackson.databind.JsonNode;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ public class RegisterSupportedModelUseCase {
     private final SupportedModelRepository modelRepository;
 
 
+    @Transactional
     public void handle(RegisterSupportedModelUseCase.Request request) {
         final SupportedModel.Id id = request.modelId();
         final Optional<SupportedModel> optionalSupportedModel = modelRepository.findBy(id);

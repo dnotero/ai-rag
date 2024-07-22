@@ -1,4 +1,4 @@
-package ar.com.dno.ai.rag.controlplane.commons;
+package ar.com.dno.ai.rag.controlplane.commons.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonCreator;

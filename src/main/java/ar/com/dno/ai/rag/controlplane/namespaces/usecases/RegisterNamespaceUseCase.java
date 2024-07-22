@@ -1,10 +1,11 @@
 package ar.com.dno.ai.rag.controlplane.namespaces.usecases;
 
 
-import ar.com.dno.ai.rag.controlplane.commons.Criticality;
+import ar.com.dno.ai.rag.controlplane.commons.domain.Criticality;
 import ar.com.dno.ai.rag.controlplane.namespaces.domain.Namespace;
 import ar.com.dno.ai.rag.controlplane.namespaces.domain.NamespaceRepository;
 import ar.com.dno.ai.rag.controlplane.namespaces.usecases.exceptions.NamespaceAlreadyExistException;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ public class RegisterNamespaceUseCase {
     private final NamespaceRepository namespaceRepository;
 
 
+    @Transactional
     public void handle(RegisterNamespaceUseCase.Request request) {
         final Optional<Namespace> optionalNamespace = namespaceRepository.findBy(request.name());
 

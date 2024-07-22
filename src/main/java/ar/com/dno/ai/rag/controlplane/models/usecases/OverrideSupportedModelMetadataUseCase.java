@@ -5,6 +5,7 @@ import ar.com.dno.ai.rag.controlplane.models.domain.SupportedModel;
 import ar.com.dno.ai.rag.controlplane.models.domain.SupportedModelRepository;
 import ar.com.dno.ai.rag.controlplane.models.usecases.exceptions.SupportedModelNotFoundException;
 import com.fasterxml.jackson.databind.JsonNode;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ public class OverrideSupportedModelMetadataUseCase {
     private final SupportedModelRepository modelRepository;
 
 
+    @Transactional
     public void handle(OverrideSupportedModelMetadataUseCase.Request request) {
         final SupportedModel.Id id = request.modelId();
         final SupportedModel supportedModel = modelRepository.findBy(id)

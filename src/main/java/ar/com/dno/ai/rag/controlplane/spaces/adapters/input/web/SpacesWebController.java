@@ -1,7 +1,7 @@
 package ar.com.dno.ai.rag.controlplane.spaces.adapters.input.web;
 
 
-import ar.com.dno.ai.rag.controlplane.commons.Criticality;
+import ar.com.dno.ai.rag.controlplane.commons.domain.Criticality;
 import ar.com.dno.ai.rag.controlplane.spaces.domain.Space;
 import ar.com.dno.ai.rag.controlplane.spaces.usecases.DeleteSpaceUseCase;
 import ar.com.dno.ai.rag.controlplane.spaces.usecases.GetSpaceUseCase;

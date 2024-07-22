@@ -1,9 +1,11 @@
 package ar.com.dno.ai.rag.controlplane.spaces.usecases;
 
 
-import ar.com.dno.ai.rag.controlplane.commons.Criticality;
+import ar.com.dno.ai.rag.controlplane.commons.domain.Criticality;
 import ar.com.dno.ai.rag.controlplane.models.domain.SupportedModel;
 import ar.com.dno.ai.rag.controlplane.models.usecases.RegisterSupportedModelUseCase;
+import ar.com.dno.ai.rag.controlplane.namespaces.domain.Namespace;
+import ar.com.dno.ai.rag.controlplane.namespaces.usecases.RegisterNamespaceUseCase;
 import ar.com.dno.ai.rag.controlplane.spaces.domain.Space;
 import ar.com.dno.ai.rag.controlplane.spaces.domain.SpaceRepository;
 import ar.com.dno.ai.rag.controlplane.spaces.usecases.exceptions.SpaceAlreadyExistsException;
@@ -17,6 +19,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
@@ -27,7 +30,8 @@ class RegisterSpaceUseCaseTest {
     private RegisterSpaceUseCase useCase;
     @Autowired
     private RegisterSupportedModelUseCase registerSupportedModel;
-
+    @Autowired
+    private RegisterNamespaceUseCase registerNamespace;
 
     @Test
     void noDuplicateSpacesAllowed() {
@@ -56,11 +60,17 @@ class RegisterSpaceUseCaseTest {
         final Space.Id id = new Space.Id(name, model);
         final RegisterSpaceUseCase.Request request = new RegisterSpaceUseCase.Request(name, model, Criticality.TEST);
 
+        registerNamespace.handle(new RegisterNamespaceUseCase.Request(
+                new Namespace.Name("prod-test"),
+                Criticality.TEST
+        ));
+
         registerSupportedModel.handle(new RegisterSupportedModelUseCase.Request(
                 new SupportedModel.Provider("provider"),
                 new SupportedModel.Name("model"),
                 null
         ));
+
         final Optional<Space> beforeSave = spaceRepository.findById(id);
 
         // When
@@ -74,5 +84,6 @@ class RegisterSpaceUseCaseTest {
         assertEquals(name, space.name());
         assertEquals(model, space.model());
         assertEquals(Space.Status.CREATED, space.status());
+        assertNotNull(space.namespace());
     }
 }

@@ -1,16 +1,21 @@
 package ar.com.dno.ai.rag.controlplane.spaces.usecases;
 
 
-import ar.com.dno.ai.rag.controlplane.commons.Criticality;
+import ar.com.dno.ai.rag.controlplane.commons.domain.Criticality;
 import ar.com.dno.ai.rag.controlplane.models.domain.SupportedModel;
 import ar.com.dno.ai.rag.controlplane.models.domain.SupportedModelSearchService;
+import ar.com.dno.ai.rag.controlplane.namespaces.domain.Namespace;
+import ar.com.dno.ai.rag.controlplane.namespaces.domain.NamespaceSearchService;
+import ar.com.dno.ai.rag.controlplane.spaces.domain.NamespaceSelector;
 import ar.com.dno.ai.rag.controlplane.spaces.domain.Space;
 import ar.com.dno.ai.rag.controlplane.spaces.domain.SpaceRepository;
 import ar.com.dno.ai.rag.controlplane.spaces.usecases.exceptions.ModelNotSupportedException;
 import ar.com.dno.ai.rag.controlplane.spaces.usecases.exceptions.SpaceAlreadyExistsException;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -19,8 +24,11 @@ import java.util.Optional;
 public class RegisterSpaceUseCase {
     private final SpaceRepository spaceRepository;
     private final SupportedModelSearchService modelSearchService;
+    private final NamespaceSearchService namespaceSearchService;
+    private final NamespaceSelector namespaceSelector;
 
 
+    @Transactional
     public void handle(Request request) {
         final Space.Id spaceId = request.spaceId();
         final Optional<Space> optionalSpace = spaceRepository.findById(spaceId);
@@ -38,7 +46,11 @@ public class RegisterSpaceUseCase {
         }
 
         final Space space = new Space(request.name(), request.model(), request.criticality());
-        spaceRepository.save(space);
+        final List<Namespace> namespaces = namespaceSearchService.findAll();
+        final Namespace namespace = namespaceSelector.select(space, namespaces).orElseThrow(RuntimeException::new);
+        final Space assignedSpace = space.assign(namespace);
+
+        spaceRepository.save(assignedSpace);
     }
 
 
