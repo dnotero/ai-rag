@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Set;
 
 
 @AllArgsConstructor
@@ -27,12 +28,20 @@ public class RegisterSupportedModelUseCase {
             throw new ModelAlreadySupportedException(id);
         }
 
-        final SupportedModel supportedModel = new SupportedModel(request.provider(), request.name(), request.metadata());
+        final SupportedModel supportedModel = new SupportedModel(
+                request.provider(),
+                request.name(),
+                request.supportedFormats(),
+                request.metadata()
+        );
         modelRepository.save(supportedModel);
     }
 
 
-    public record Request(SupportedModel.Provider provider, SupportedModel.Name name, JsonNode metadata) {
+    public record Request(SupportedModel.Provider provider,
+                          SupportedModel.Name name,
+                          Set<SupportedModel.InputFormat> supportedFormats,
+                          JsonNode metadata) {
         public SupportedModel.Id modelId() {
             return new SupportedModel.Id(this.provider, this.name);
         }

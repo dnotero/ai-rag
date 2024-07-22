@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import java.util.Set;
+
 
 @Accessors(fluent = true)
 @AllArgsConstructor
@@ -20,15 +22,16 @@ public class SupportedModel {
     @EqualsAndHashCode.Include
     private final SupportedModel.Id id;
     private final SupportedModel.Status status;
+    private final Set<InputFormat> supportedFormats;
     private final JsonNode metadata;
 
 
-    public SupportedModel(Provider provider, Name name, JsonNode metadata) {
-        this(new Id(provider, name), metadata);
+    public SupportedModel(Provider provider, Name name, Set<InputFormat> supportedFormats, JsonNode metadata) {
+        this(new Id(provider, name), supportedFormats, metadata);
     }
 
-    public SupportedModel(SupportedModel.Id id, JsonNode metadata) {
-        this(id, Status.ENABLED, metadata);
+    public SupportedModel(SupportedModel.Id id, Set<InputFormat> supportedFormats, JsonNode metadata) {
+        this(id, Status.ENABLED, supportedFormats, metadata);
     }
 
     public SupportedModel.Provider provider() {
@@ -40,11 +43,11 @@ public class SupportedModel {
     }
 
     public SupportedModel deprecate() {
-        return new SupportedModel(this.id, Status.DEPRECATED, this.metadata);
+        return new SupportedModel(this.id, Status.DEPRECATED, this.supportedFormats, this.metadata);
     }
 
     public SupportedModel metadata(JsonNode metadata) {
-        return new SupportedModel(this.id, this.status, metadata);
+        return new SupportedModel(this.id, this.status, this.supportedFormats, metadata);
     }
 
     public boolean isEnabled() {
@@ -77,5 +80,13 @@ public class SupportedModel {
         ENABLED,
         DEPRECATED,
         DELETED;
+    }
+
+    public enum InputFormat {
+        TEXT,
+        JSON,
+        IMAGE,
+        AUDIO,
+        VIDEO;
     }
 }

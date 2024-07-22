@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.Instant;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -90,6 +91,7 @@ class SpacesWebControllerTest {
         registerSupportedModel.handle(new RegisterSupportedModelUseCase.Request(
                 new SupportedModel.Provider("openai"),
                 new SupportedModel.Name("text-embedding-3-small"),
+                Set.of(SupportedModel.InputFormat.TEXT),
                 null
         ));
 
