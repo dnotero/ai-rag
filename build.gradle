@@ -35,8 +35,10 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
 
     // Spring
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework:spring-tx'
     implementation 'org.springframework.ai:spring-ai-ollama-spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'jakarta.transaction:jakarta.transaction-api:2.0.1'
 
 
     // *** TEST ***

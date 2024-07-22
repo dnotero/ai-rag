@@ -1,7 +1,7 @@
 package ar.com.dno.ai.rag.controlplane.namespaces.adapters.input.web;
 
 
-import ar.com.dno.ai.rag.controlplane.commons.Criticality;
+import ar.com.dno.ai.rag.commons.domain.Criticality;
 import ar.com.dno.ai.rag.controlplane.namespaces.domain.Namespace;
 import ar.com.dno.ai.rag.controlplane.namespaces.domain.NamespaceSearchService;
 import ar.com.dno.ai.rag.controlplane.namespaces.usecases.RegisterNamespaceUseCase;

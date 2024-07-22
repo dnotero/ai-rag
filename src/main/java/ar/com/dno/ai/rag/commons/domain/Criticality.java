@@ -1,4 +1,7 @@
-package ar.com.dno.ai.rag.controlplane.commons;
+package ar.com.dno.ai.rag.commons.domain;
+
+
+import com.fasterxml.jackson.annotation.JsonCreator;
 
 
 public enum Criticality {
@@ -8,6 +11,7 @@ public enum Criticality {
     HIGH;
 
 
+    @JsonCreator
     public static Criticality of(String criticality) {
         return valueOf(criticality.toUpperCase());
     }

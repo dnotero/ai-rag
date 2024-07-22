@@ -1,6 +1,7 @@
 package ar.com.dno.ai.rag.controlplane.spaces.adapters.input.web;
 
 
+import ar.com.dno.ai.rag.commons.domain.Criticality;
 import ar.com.dno.ai.rag.controlplane.models.domain.SupportedModel;
 import ar.com.dno.ai.rag.controlplane.models.usecases.RegisterSupportedModelUseCase;
 import ar.com.dno.ai.rag.controlplane.spaces.domain.Space;
@@ -46,11 +47,12 @@ class SpacesWebControllerTest {
                         "model": {
                             "provider": "openai",
                             "name": "text-embedding-3-small"
-                        }
+                        },
+                        "criticality": "test"
                     }
                 """.formatted(spaceName);
 
-        final Space space = new Space(name, model);
+        final Space space = new Space(name, model, Criticality.TEST);
         spaceRepository.save(space);
 
         // When
@@ -72,7 +74,7 @@ class SpacesWebControllerTest {
         final Space.Name name = new Space.Name(spaceName);
         final Space.Model model = new Space.Model("openai", "text-embedding-3-small");
         final Space.Id id = new Space.Id(name, model);
-        final Space space = new Space(name, model);
+        final Space space = new Space(name, model, Criticality.TEST);
         final String body =
                 """
                     {
@@ -80,7 +82,8 @@ class SpacesWebControllerTest {
                         "model": {
                             "provider": "openai",
                             "name": "text-embedding-3-small"
-                        }
+                        },
+                        "criticality": "test"
                     }
                 """.formatted(spaceName);
 
@@ -118,11 +121,12 @@ class SpacesWebControllerTest {
                         "model": {
                             "provider": "%s",
                             "name": "%s"
-                        }
+                        },
+                        "criticality": "test"
                     }
                 """.formatted(name, provider, model);
 
-        final Space space = new Space(new Space.Name(name), new Space.Model(provider, model));
+        final Space space = new Space(new Space.Name(name), new Space.Model(provider, model), Criticality.TEST);
         spaceRepository.save(space);
 
         // When

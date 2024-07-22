@@ -1,7 +1,7 @@
 package ar.com.dno.ai.rag.controlplane.namespaces.domain;
 
 
-import ar.com.dno.ai.rag.controlplane.commons.Criticality;
+import ar.com.dno.ai.rag.commons.domain.Criticality;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;

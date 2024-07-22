@@ -4,6 +4,7 @@ package ar.com.dno.ai.rag.controlplane.models.usecases;
 import ar.com.dno.ai.rag.controlplane.models.domain.SupportedModel;
 import ar.com.dno.ai.rag.controlplane.models.domain.SupportedModelRepository;
 import ar.com.dno.ai.rag.controlplane.models.usecases.exceptions.SupportedModelNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ public class DeprecateSupportedModelUseCase {
     private final SupportedModelRepository modelRepository;
 
 
+    @Transactional
     public void handle(DeprecateSupportedModelUseCase.Request request) {
         final SupportedModel.Id id = request.modelId();
         final SupportedModel supportedModel = modelRepository.findBy(id)

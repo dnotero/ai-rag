@@ -1,6 +1,7 @@
 package ar.com.dno.ai.rag.controlplane.spaces.usecases;
 
 
+import ar.com.dno.ai.rag.commons.domain.Criticality;
 import ar.com.dno.ai.rag.controlplane.spaces.domain.Space;
 import ar.com.dno.ai.rag.controlplane.spaces.domain.SpaceRepository;
 import org.junit.jupiter.api.Test;
@@ -40,7 +41,7 @@ class GetSpaceUseCaseTest {
         // Given
         final Space.Name name = new Space.Name("test-%s".formatted(Instant.now()));
         final Space.Model model = new Space.Model("provider", "model");
-        final Space space = new Space(name, model);
+        final Space space = new Space(name, model, Criticality.TEST);
         final GetSpaceUseCase.Query query = new GetSpaceUseCase.Query(name, model);
 
         spaceRepository.save(space);
