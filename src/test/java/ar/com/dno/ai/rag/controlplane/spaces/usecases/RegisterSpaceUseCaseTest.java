@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.Instant;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -68,6 +69,7 @@ class RegisterSpaceUseCaseTest {
         registerSupportedModel.handle(new RegisterSupportedModelUseCase.Request(
                 new SupportedModel.Provider("provider"),
                 new SupportedModel.Name("model"),
+                Set.of(SupportedModel.InputFormat.TEXT),
                 null
         ));
 

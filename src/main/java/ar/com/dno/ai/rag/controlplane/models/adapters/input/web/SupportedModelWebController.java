@@ -6,6 +6,7 @@ import ar.com.dno.ai.rag.controlplane.models.usecases.DeprecateSupportedModelUse
 import ar.com.dno.ai.rag.controlplane.models.usecases.ListSupportedModelsUseCase;
 import ar.com.dno.ai.rag.controlplane.models.usecases.OverrideSupportedModelMetadataUseCase;
 import ar.com.dno.ai.rag.controlplane.models.usecases.RegisterSupportedModelUseCase;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Set;
 
 
 @AllArgsConstructor
@@ -39,11 +41,12 @@ public class SupportedModelWebController {
     @PostMapping(path = "/admin/providers/{provider}/models/{model}")
     ResponseEntity<Void> registerSupportedModel(@PathVariable("provider") String provider,
                                                 @PathVariable("model") String name,
-                                                @RequestBody JsonNode metadata) {
+                                                @RequestBody RegisterSupportedModelRequest webRequest) {
         final RegisterSupportedModelUseCase.Request request = new RegisterSupportedModelUseCase.Request(
                 new SupportedModel.Provider(provider),
                 new SupportedModel.Name(name),
-                metadata
+                webRequest.supportedFormats(),
+                webRequest.metadata()
         );
         registerSupportedModel.handle(request);
 
@@ -78,5 +81,11 @@ public class SupportedModelWebController {
         disableSupportedModel.handle(request);
 
         return ResponseEntity.noContent().build();
+    }
+
+
+    public record RegisterSupportedModelRequest(
+            @JsonProperty("supported_formats") Set<SupportedModel.InputFormat> supportedFormats,
+            @JsonProperty("metadata") JsonNode metadata) {
     }
 }

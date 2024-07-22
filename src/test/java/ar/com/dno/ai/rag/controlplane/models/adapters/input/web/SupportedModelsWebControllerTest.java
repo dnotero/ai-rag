@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.time.Instant;
+import java.util.Set;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -50,7 +51,7 @@ class SupportedModelsWebControllerTest {
                         "field_1": "value_1"
                     }
                 """);
-        final SupportedModel model = new SupportedModel(provider, name, metadata);
+        final SupportedModel model = new SupportedModel(provider, name, Set.of(SupportedModel.InputFormat.TEXT), metadata);
         modelRepository.save(model);
 
         // When
@@ -78,7 +79,10 @@ class SupportedModelsWebControllerTest {
         final String body =
                 """
                     {
-                        "field_1": "value_1"
+                        "supported_formats": ["TEXT"],
+                        "metadata": {
+                            "field_1": "value_1"
+                        }
                     }
                 """;
 
@@ -95,7 +99,7 @@ class SupportedModelsWebControllerTest {
         assertEquals(provider, supportedModel.provider());
         assertEquals(name, supportedModel.name());
         assertEquals(SupportedModel.Status.ENABLED, supportedModel.status());
-        assertEquals(objectMapper.readTree(body), supportedModel.metadata());
+        assertEquals(objectMapper.readTree(body).get("metadata"), supportedModel.metadata());
     }
 
     @Test
@@ -107,10 +111,13 @@ class SupportedModelsWebControllerTest {
         final JsonNode metadata = objectMapper.readTree(
                 """
                     {
-                        "field_1": "value_1"
+                        "supported_formats": ["TEXT"],
+                        "metadata": {
+                            "field_1": "value_1"
+                        }
                     }
                 """);
-        final SupportedModel model = new SupportedModel(provider, name, metadata);
+        final SupportedModel model = new SupportedModel(provider, name, Set.of(SupportedModel.InputFormat.TEXT), metadata);
         modelRepository.save(model);
 
         // When
@@ -135,12 +142,16 @@ class SupportedModelsWebControllerTest {
         final JsonNode metadata = objectMapper.readTree(
                 """
                     {
-                        "field_1": "value_1"
+                        "supported_formats": ["TEXT"],
+                        "metadata": {
+                            "field_1": "value_1"
+                        }
                     }
                 """);
         modelRepository.save(new SupportedModel(
                 new SupportedModel.Provider(provider),
                 new SupportedModel.Name(model),
+                Set.of(SupportedModel.InputFormat.TEXT),
                 metadata
         ));
 
@@ -154,6 +165,7 @@ class SupportedModelsWebControllerTest {
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[0].id.provider").value(is(provider)))
                 .andExpect(jsonPath("$[0].id.name").value(is(model)))
+                .andExpect(jsonPath("$[0].supported_formats[0]").value(is(SupportedModel.InputFormat.TEXT.name())))
                 .andDo(MockMvcResultHandlers.print());
     }
 
@@ -166,10 +178,13 @@ class SupportedModelsWebControllerTest {
         final JsonNode metadata = objectMapper.readTree(
                 """
                     {
-                        "field_1": "value_1"
+                        "supported_formats": ["TEXT"],
+                        "metadata": {
+                            "field_1": "value_1"
+                        }
                     }
                 """);
-        final SupportedModel model = new SupportedModel(provider, name, metadata);
+        final SupportedModel model = new SupportedModel(provider, name, Set.of(SupportedModel.InputFormat.TEXT), metadata);
         modelRepository.save(model);
 
         // When
