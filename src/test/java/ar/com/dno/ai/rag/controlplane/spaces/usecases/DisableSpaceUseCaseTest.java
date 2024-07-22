@@ -1,7 +1,7 @@
 package ar.com.dno.ai.rag.controlplane.spaces.usecases;
 
 
-import ar.com.dno.ai.rag.controlplane.commons.domain.Criticality;
+import ar.com.dno.ai.rag.commons.domain.Criticality;
 import ar.com.dno.ai.rag.controlplane.spaces.domain.Space;
 import ar.com.dno.ai.rag.controlplane.spaces.domain.SpaceRepository;
 import ar.com.dno.ai.rag.controlplane.spaces.usecases.exceptions.SpaceNotFoundException;

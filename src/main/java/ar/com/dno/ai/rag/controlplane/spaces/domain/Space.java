@@ -1,7 +1,7 @@
 package ar.com.dno.ai.rag.controlplane.spaces.domain;
 
 
-import ar.com.dno.ai.rag.controlplane.commons.domain.Criticality;
+import ar.com.dno.ai.rag.commons.domain.Criticality;
 import ar.com.dno.ai.rag.controlplane.models.domain.SupportedModel;
 import ar.com.dno.ai.rag.controlplane.namespaces.domain.Namespace;
 import ar.com.dno.ai.rag.controlplane.spaces.domain.exceptions.NamespaceAlreadyAssignedException;
