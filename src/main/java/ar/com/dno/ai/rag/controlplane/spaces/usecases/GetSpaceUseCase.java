@@ -16,10 +16,10 @@ public class GetSpaceUseCase {
 
 
     public Optional<Space> handle(GetSpaceUseCase.Query query) {
-        return spaceSearchService.findByNameAndModel(query.name(), query.model());
+        return spaceSearchService.findBy(query.spaceId());
     }
 
 
-    public record Query(Space.Name name, Space.Model model) {
+    public record Query(Space.Id spaceId) {
     }
 }

@@ -49,7 +49,7 @@ class RegisterSpaceUseCaseTest {
 
         // Then
         assertThrows(ModelNotSupportedException.class, testCase);
-        assertEquals(Optional.empty(), spaceRepository.findById(id));
+        assertEquals(Optional.empty(), spaceRepository.findBy(id));
     }
 
     @Test
@@ -75,7 +75,7 @@ class RegisterSpaceUseCaseTest {
 
         // Then
         assertThrows(SpaceAlreadyExistsException.class, testCase);
-        assertEquals(space, spaceRepository.findById(id).orElseThrow());
+        assertEquals(space, spaceRepository.findBy(id).orElseThrow());
     }
 
     @Test
@@ -98,7 +98,7 @@ class RegisterSpaceUseCaseTest {
                 null
         ));
 
-        final Optional<Space> beforeSave = spaceRepository.findById(id);
+        final Optional<Space> beforeSave = spaceRepository.findBy(id);
 
         // When
         final Executable testCase = () -> useCase.handle(request);
@@ -106,7 +106,7 @@ class RegisterSpaceUseCaseTest {
         // Then
         assertDoesNotThrow(testCase);
 
-        final Space space = spaceRepository.findById(id).orElseThrow();
+        final Space space = spaceRepository.findBy(id).orElseThrow();
         assertEquals(Optional.empty(), beforeSave);
         assertEquals(name, space.name());
         assertEquals(model, space.model());

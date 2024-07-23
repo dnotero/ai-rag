@@ -24,14 +24,14 @@ public final class Space {
     private final Id id;
     private final Space.Status status;
     private final Criticality criticality;
-    private final Namespace.Name namespace;
+    private final Namespace namespace;
 
 
     public Space(final Space.Name name, final Space.Model model, final Criticality criticality) {
         this(new Id(name, model), Status.CREATED, criticality, null);
     }
 
-    private Space(final Space.Id id, final Space.Status status, final Criticality criticality, final Namespace.Name namespace) {
+    private Space(final Space.Id id, final Space.Status status, final Criticality criticality, final Namespace namespace) {
         this.id = id;
         this.status = status;
         this.criticality = criticality;
@@ -46,6 +46,10 @@ public final class Space {
         return this.id.model();
     }
 
+    public boolean isActive() {
+        return Status.ACTIVE == this.status;
+    }
+
     public Space markAsDisabled() {
         return new Space(this.id, Status.DISABLED, this.criticality, this.namespace);
     }
@@ -58,7 +62,7 @@ public final class Space {
         if (nonNull(this.namespace)) {
             throw new NamespaceAlreadyAssignedException(this.id);
         }
-        return new Space(this.id, this.status, this.criticality, namespace.name());
+        return new Space(this.id, this.status, this.criticality, namespace);
     }
 
 

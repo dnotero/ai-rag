@@ -5,6 +5,6 @@ import java.util.Optional;
 
 
 public interface SpaceRepository {
-    Optional<Space> findById(Space.Id id);
+    Optional<Space> findBy(Space.Id id);
     void save(Space space);
 }

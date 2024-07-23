@@ -28,7 +28,7 @@ class GetSpaceUseCaseTest {
         // Given
         final Space.Name name = new Space.Name("test-%s".formatted(Instant.now()));
         final Space.Model model = new Space.Model("provider", "model-%s".formatted(Instant.now()));
-        final GetSpaceUseCase.Query query = new GetSpaceUseCase.Query(name, model);
+        final GetSpaceUseCase.Query query = new GetSpaceUseCase.Query(new Space.Id(name, model));
 
         // When
         final Optional<Space> optionalSpace = useCase.handle(query);
@@ -43,7 +43,7 @@ class GetSpaceUseCaseTest {
         final Space.Name name = new Space.Name("test-%s".formatted(Instant.now()));
         final Space.Model model = new Space.Model("provider", "model-%s".formatted(Instant.now()));
         final Space space = new Space(name, model, Criticality.TEST);
-        final GetSpaceUseCase.Query query = new GetSpaceUseCase.Query(name, model);
+        final GetSpaceUseCase.Query query = new GetSpaceUseCase.Query(new Space.Id(name, model));
 
         spaceRepository.save(space);
 

@@ -1,4 +1,4 @@
-package ar.com.dno.ai.rag.controlplane.spaces.adapters.output.events.listeners;
+package ar.com.dno.ai.rag.controlplane.spaces.adapters.input.listeners;
 
 
 import ar.com.dno.ai.rag.controlplane.spaces.adapters.output.events.SpaceCreated;

@@ -50,8 +50,8 @@ public class SupportedModel {
         return new SupportedModel(this.id, this.status, this.supportedFormats, metadata);
     }
 
-    public boolean isEnabled() {
-        return Status.ENABLED == this.status;
+    public boolean isDeprecated() {
+        return Status.DEPRECATED == this.status;
     }
 
 
@@ -78,8 +78,7 @@ public class SupportedModel {
 
     public enum Status {
         ENABLED,
-        DEPRECATED,
-        DELETED;
+        DEPRECATED;
     }
 
     public enum InputFormat {
