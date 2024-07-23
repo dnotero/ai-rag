@@ -6,7 +6,6 @@ import ar.com.dno.ai.rag.controlplane.spaces.domain.SpaceRepository;
 import ar.com.dno.ai.rag.controlplane.spaces.domain.SpaceSearchService;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +29,7 @@ public class MemorySpaceRepository implements SpaceRepository, SpaceSearchServic
     }
 
     @Override
-    public Optional<Space> findById(Space.Id id) {
+    public Optional<Space> findBy(Space.Id id) {
         return Optional.ofNullable(spacesById.get(id));
     }
 
@@ -41,12 +40,30 @@ public class MemorySpaceRepository implements SpaceRepository, SpaceSearchServic
     }
 
     @Override
-    public List<Space> findByName(Space.Name name) {
-        return new ArrayList<>(spacesByNameAndModel.getOrDefault(name, Map.of()).values());
+    public List<Space> findBy(Space.Name name) {
+        return spacesById.values().stream()
+                .filter(space -> space.name().equals(name))
+                .toList();
     }
 
     @Override
-    public Optional<Space> findByNameAndModel(Space.Name name, Space.Model model) {
-        return Optional.ofNullable(spacesByNameAndModel.getOrDefault(name, Map.of()).get(model));
+    public List<Space> findBy(Space.Name name, Space.Status status) {
+        return spacesById.values().stream()
+                .filter(space -> space.name().equals(name))
+                .filter(space -> space.status() == status)
+                .toList();
+    }
+
+    @Override
+    public Optional<Space> findBy(Space.Id id, Space.Status status) {
+        return Optional.ofNullable(spacesById.get(id))
+                .filter(space -> space.status() == status);
+    }
+
+    @Override
+    public List<Space> findAllBy(Space.Model model, Space.Status status) {
+        return spacesById.values().stream()
+                .filter(space -> space.model().equals(model))
+                .toList();
     }
 }

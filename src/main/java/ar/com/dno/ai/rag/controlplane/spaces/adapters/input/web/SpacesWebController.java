@@ -3,7 +3,7 @@ package ar.com.dno.ai.rag.controlplane.spaces.adapters.input.web;
 
 import ar.com.dno.ai.rag.commons.domain.Criticality;
 import ar.com.dno.ai.rag.controlplane.spaces.domain.Space;
-import ar.com.dno.ai.rag.controlplane.spaces.usecases.DeleteSpaceUseCase;
+import ar.com.dno.ai.rag.controlplane.spaces.usecases.DisableSpaceUseCase;
 import ar.com.dno.ai.rag.controlplane.spaces.usecases.GetSpaceUseCase;
 import ar.com.dno.ai.rag.controlplane.spaces.usecases.ListSpacesUseCase;
 import ar.com.dno.ai.rag.controlplane.spaces.usecases.RegisterSpaceUseCase;
@@ -31,7 +31,7 @@ public class SpacesWebController {
     private RegisterSpaceUseCase registerSpace;
     private GetSpaceUseCase getSpace;
     private ListSpacesUseCase listSpaces;
-    private DeleteSpaceUseCase deleteSpace;
+    private DisableSpaceUseCase disableSpace;
 
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -53,21 +53,23 @@ public class SpacesWebController {
     ResponseEntity<Space> getSpace(@PathVariable("name") String name,
                                    @PathVariable("provider") String provider,
                                    @PathVariable("model") String model) {
-        final GetSpaceUseCase.Query query = new GetSpaceUseCase.Query(new Space.Name(name), new Space.Model(provider, model));
+        final Space.Name spaceName = new Space.Name(name);
+        final Space.Model spaceModel = new Space.Model(provider, model);
+        final GetSpaceUseCase.Query query = new GetSpaceUseCase.Query(new Space.Id(spaceName, spaceModel));
         final Optional<Space> optionalSpace = getSpace.handle(query);
 
         return ResponseEntity.of(optionalSpace);
     }
 
     @DeleteMapping(path = "/{name}/providers/{provider}/models/{model}")
-    ResponseEntity<Void> deleteSpace(@PathVariable("name") String name,
-                                     @PathVariable("provider") String provider,
-                                     @PathVariable("model") String model) {
+    ResponseEntity<Void> disableSpace(@PathVariable("name") String name,
+                                      @PathVariable("provider") String provider,
+                                      @PathVariable("model") String model) {
         final Space.Name spaceName = new Space.Name(name);
         final Space.Model spaceModel = new Space.Model(provider, model);
-        final DeleteSpaceUseCase.Request request = new DeleteSpaceUseCase.Request(spaceName, spaceModel);
+        final DisableSpaceUseCase.Request request = new DisableSpaceUseCase.Request(new Space.Id(spaceName, spaceModel));
 
-        deleteSpace.handle(request);
+        disableSpace.handle(request);
 
         return ResponseEntity.noContent().build();
     }

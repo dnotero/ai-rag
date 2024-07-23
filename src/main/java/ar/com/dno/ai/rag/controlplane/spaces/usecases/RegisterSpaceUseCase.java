@@ -28,12 +28,12 @@ public class RegisterSpaceUseCase {
         final SupportedModel supportedModel = modelSearchService.findBy(supportedModelId)
                 .orElseThrow(() -> new ModelNotSupportedException(supportedModelId));
 
-        if (!supportedModel.isEnabled()) {
+        if (supportedModel.isDeprecated()) {
             throw new ModelNotSupportedException(supportedModelId);
         }
 
         final Space.Id spaceId = request.spaceId();
-        final Optional<Space> optionalSpace = spaceRepository.findById(spaceId);
+        final Optional<Space> optionalSpace = spaceRepository.findBy(spaceId);
 
         if(optionalSpace.isPresent()) {
             throw new SpaceAlreadyExistsException(spaceId);

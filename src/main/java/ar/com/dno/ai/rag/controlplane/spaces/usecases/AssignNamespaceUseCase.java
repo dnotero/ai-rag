@@ -26,7 +26,7 @@ public class AssignNamespaceUseCase {
 
     @Transactional
     public void handle(AssignNamespaceUseCase.Request request) {
-        final Space space = spaceRepository.findById(request.spaceId())
+        final Space space = spaceRepository.findBy(request.spaceId())
                 .orElseThrow(() -> new SpaceNotFoundException(request.spaceId()));
 
         if (nonNull(space.namespace())) {

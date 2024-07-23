@@ -56,7 +56,7 @@ class DeleteSpaceUseCaseTest {
         // Then
         assertDoesNotThrow(testCase);
 
-        final Space space = spaceRepository.findById(id).orElseThrow();
+        final Space space = spaceRepository.findBy(id).orElseThrow();
         assertEquals(name, space.name());
         assertEquals(model, space.model());
         assertEquals(Space.Status.DELETED, space.status());

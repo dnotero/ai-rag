@@ -18,7 +18,7 @@ public class DeleteSpaceUseCase {
     @Transactional
     public void handle(DeleteSpaceUseCase.Request request) {
         final Space.Id spaceId = new Space.Id(request.name(), request.model());
-        final Space space = spaceRepository.findById(spaceId)
+        final Space space = spaceRepository.findBy(spaceId)
                 .orElseThrow(() -> new SpaceNotFoundException(spaceId));
 
         final Space disabledSpace = space.markAsDelete();

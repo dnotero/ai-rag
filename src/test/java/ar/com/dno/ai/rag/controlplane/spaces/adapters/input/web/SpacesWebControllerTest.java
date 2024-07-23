@@ -4,8 +4,10 @@ package ar.com.dno.ai.rag.controlplane.spaces.adapters.input.web;
 import ar.com.dno.ai.rag.commons.domain.Criticality;
 import ar.com.dno.ai.rag.controlplane.models.domain.SupportedModel;
 import ar.com.dno.ai.rag.controlplane.models.usecases.RegisterSupportedModelUseCase;
+import ar.com.dno.ai.rag.controlplane.namespaces.domain.Namespace;
+import ar.com.dno.ai.rag.controlplane.namespaces.usecases.RegisterNamespaceUseCase;
+import ar.com.dno.ai.rag.controlplane.spaces.adapters.output.memory.MemorySpaceRepository;
 import ar.com.dno.ai.rag.controlplane.spaces.domain.Space;
-import ar.com.dno.ai.rag.controlplane.spaces.domain.SpaceRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -31,7 +33,9 @@ class SpacesWebControllerTest {
     @Autowired
     private RegisterSupportedModelUseCase registerSupportedModel;
     @Autowired
-    private SpaceRepository spaceRepository;
+    private MemorySpaceRepository spaceRepository;
+    @Autowired
+    private RegisterNamespaceUseCase registerNamespace;
 
 
     @Test
@@ -65,7 +69,7 @@ class SpacesWebControllerTest {
 
         // Then
         results.andExpect(status().isConflict());
-        assertEquals(space, spaceRepository.findById(id).orElseThrow());
+        assertEquals(space, spaceRepository.findBy(id).orElseThrow());
     }
 
     @Test
@@ -88,6 +92,11 @@ class SpacesWebControllerTest {
                     }
                 """.formatted(spaceName);
 
+        registerNamespace.handle(new RegisterNamespaceUseCase.Request(
+                new Namespace.Name("prod-test-%s".formatted(Instant.now())),
+                Criticality.TEST
+        ));
+
         registerSupportedModel.handle(new RegisterSupportedModelUseCase.Request(
                 new SupportedModel.Provider("openai"),
                 new SupportedModel.Name("text-embedding-3-small"),
@@ -104,11 +113,11 @@ class SpacesWebControllerTest {
 
         // Then
         results.andExpect(status().isCreated());
-        assertEquals(space, spaceRepository.findById(id).orElseThrow());
+        assertEquals(space, spaceRepository.findBy(id).orElseThrow());
     }
 
     @Test
-    void spaceIsDeleted() throws Exception {
+    void spaceIsDisabled() throws Exception {
         // Given
         final String name = "test-%s".formatted(Instant.now().toEpochMilli());
         final String provider = "openai";
@@ -140,7 +149,7 @@ class SpacesWebControllerTest {
 
         // Then
         deleteResult.andExpect(status().isNoContent());
-        final Space deletedSpace = spaceRepository.findById(id).orElseThrow();
-        assertEquals(Space.Status.DELETED, deletedSpace.status());
+        final Space deletedSpace = spaceRepository.findBy(id).orElseThrow();
+        assertEquals(Space.Status.DISABLED, deletedSpace.status());
     }
 }

@@ -89,7 +89,7 @@ class NamespacesWebControllerTest {
     @Test
     void listNamespaces() throws Exception {
         // Given
-        final String name = "test-%s".formatted(Instant.now().toEpochMilli());
+        final String name = "test-%s".formatted(Instant.now());
         final Namespace namespace = new Namespace(new Namespace.Name(name), Criticality.TEST);
         namespaceRepository.save(namespace);
 

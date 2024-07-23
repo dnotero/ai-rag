@@ -16,7 +16,7 @@ public class ListSpacesUseCase {
 
 
     public List<Space> handle(ListSpacesUseCase.Query query) {
-        return spaceSearchService.findByName(query.name());
+        return spaceSearchService.findBy(query.name());
     }
 
     public record Query(Space.Name name) {

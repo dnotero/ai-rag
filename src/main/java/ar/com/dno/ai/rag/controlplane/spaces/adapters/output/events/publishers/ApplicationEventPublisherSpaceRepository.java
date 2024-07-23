@@ -25,8 +25,8 @@ public class ApplicationEventPublisherSpaceRepository implements SpaceRepository
 
 
     @Override
-    public Optional<Space> findById(Space.Id id) {
-        return delegate.findById(id);
+    public Optional<Space> findBy(Space.Id id) {
+        return delegate.findBy(id);
     }
 
     @Override
@@ -42,6 +42,6 @@ public class ApplicationEventPublisherSpaceRepository implements SpaceRepository
     }
 
     private boolean isNew(Space space) {
-        return this.findById(space.id()).isEmpty();
+        return this.findBy(space.id()).isEmpty();
     }
 }

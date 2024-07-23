@@ -6,6 +6,9 @@ import java.util.Optional;
 
 
 public interface SpaceSearchService {
-    List<Space> findByName(Space.Name name);
-    Optional<Space> findByNameAndModel(Space.Name name, Space.Model model);
+    List<Space> findBy(Space.Name name);
+    List<Space> findBy(Space.Name name, Space.Status status);
+    Optional<Space> findBy(Space.Id id);
+    Optional<Space> findBy(Space.Id id, Space.Status status);
+    List<Space> findAllBy(Space.Model model, Space.Status status);
 }
