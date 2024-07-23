@@ -8,6 +8,7 @@ import ar.com.dno.ai.rag.controlplane.namespaces.domain.Namespace;
 import ar.com.dno.ai.rag.controlplane.namespaces.usecases.RegisterNamespaceUseCase;
 import ar.com.dno.ai.rag.controlplane.spaces.domain.Space;
 import ar.com.dno.ai.rag.controlplane.spaces.domain.SpaceRepository;
+import ar.com.dno.ai.rag.controlplane.spaces.usecases.exceptions.ModelNotSupportedException;
 import ar.com.dno.ai.rag.controlplane.spaces.usecases.exceptions.SpaceAlreadyExistsException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -34,14 +35,38 @@ class RegisterSpaceUseCaseTest {
     @Autowired
     private RegisterNamespaceUseCase registerNamespace;
 
+
+    @Test
+    void unsupportedModelsNotAllowed() {
+        // Given
+        final Space.Name name = new Space.Name("test-%s".formatted(Instant.now()));
+        final Space.Model model = new Space.Model("provider", "model-%s".formatted(Instant.now()));
+        final Space.Id id = new Space.Id(name, model);
+        final RegisterSpaceUseCase.Request request = new RegisterSpaceUseCase.Request(name, model, Criticality.TEST);
+
+        // When
+        final Executable testCase = () -> useCase.handle(request);
+
+        // Then
+        assertThrows(ModelNotSupportedException.class, testCase);
+        assertEquals(Optional.empty(), spaceRepository.findById(id));
+    }
+
     @Test
     void noDuplicateSpacesAllowed() {
         // Given
         final Space.Name name = new Space.Name("test-%s".formatted(Instant.now()));
-        final Space.Model model = new Space.Model("provider", "model");
+        final Space.Model model = new Space.Model("provider", "model-%s".formatted(Instant.now()));
         final Space.Id id = new Space.Id(name, model);
         final Space space = new Space(name, model, Criticality.TEST);
         final RegisterSpaceUseCase.Request request = new RegisterSpaceUseCase.Request(name, model, Criticality.TEST);
+
+        registerSupportedModel.handle(new RegisterSupportedModelUseCase.Request(
+                new SupportedModel.Provider(model.provider()),
+                new SupportedModel.Name(model.name()),
+                Set.of(SupportedModel.InputFormat.TEXT),
+                null
+        ));
 
         spaceRepository.save(space);
 
@@ -57,7 +82,7 @@ class RegisterSpaceUseCaseTest {
     void spaceIsRegisteredCorrectly() {
         // Given
         final Space.Name name = new Space.Name("test-%s".formatted(Instant.now()));
-        final Space.Model model = new Space.Model("provider", "model");
+        final Space.Model model = new Space.Model("provider", "model-%s".formatted(Instant.now()));
         final Space.Id id = new Space.Id(name, model);
         final RegisterSpaceUseCase.Request request = new RegisterSpaceUseCase.Request(name, model, Criticality.TEST);
 
@@ -67,8 +92,8 @@ class RegisterSpaceUseCaseTest {
         ));
 
         registerSupportedModel.handle(new RegisterSupportedModelUseCase.Request(
-                new SupportedModel.Provider("provider"),
-                new SupportedModel.Name("model"),
+                new SupportedModel.Provider(model.provider()),
+                new SupportedModel.Name(model.name()),
                 Set.of(SupportedModel.InputFormat.TEXT),
                 null
         ));
